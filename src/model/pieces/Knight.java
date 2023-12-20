@@ -4,6 +4,7 @@ public class Knight {
   //class for the knight
 
   public Knight(){
+    //
 
   }
 }
