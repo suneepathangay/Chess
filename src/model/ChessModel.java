@@ -1,6 +1,7 @@
 package src.model;
 
 import src.model.pieces.King;
+import src.model.pieces.Pawn;
 import src.model.pieces.Piece;
 import src.model.pieces.Rook;
 
@@ -23,6 +24,7 @@ public class ChessModel implements IModel {
     initBoard();
     placeKings();
     placeRooks();
+    setupPawn();
     this.turn=Color.WHITE;
   }
 
@@ -30,6 +32,9 @@ public class ChessModel implements IModel {
   public void placePiece(Coordinate coordinate,Coordinate orgPos){
     Tile tile=this.getTileAt(orgPos);
     Piece piece=tile.getPiece();
+    if(piece.getColor()!=turn){
+      throw new IllegalStateException("not your turn");
+    }
     tile.setPiece(null);
     Tile newTile=this.getTileAt(coordinate);
     newTile.setPiece(piece);
@@ -128,6 +133,21 @@ public class ChessModel implements IModel {
     Tile tile4=this.board.get(0).get(7);
     Rook blackTwo=new Rook(Color.BLACK,tile4.getCoordinate(),this);
     tile4.setPiece(blackTwo);
+  }
+
+  private void setupPawn(){
+    //pawn indexes are at 1 and 6
+    for(int i=0; i<8; i++){
+      Tile tile=this.board.get(1).get(i);
+      Piece pawn=new Pawn(Color.BLACK,tile.getCoordinate(),this);
+      tile.setPiece(pawn);
+    }
+
+    for(int i=0; i<8; i++){
+      Tile tile=this.board.get(6).get(i);
+      Piece pawn=new Pawn(Color.WHITE, tile.getCoordinate(),this);
+      tile.setPiece(pawn);
+    }
 
   }
 

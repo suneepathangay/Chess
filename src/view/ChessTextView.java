@@ -6,6 +6,7 @@ import src.model.Coordinate;
 import src.model.ReadOnlyChess;
 import src.model.Tile;
 import src.model.pieces.King;
+import src.model.pieces.Pawn;
 import src.model.pieces.Piece;
 import src.model.pieces.Rook;
 
@@ -37,6 +38,9 @@ public class ChessTextView implements TextView {
           }
           if(tile.getPiece() instanceof Rook){
             row.append("R ");
+          }
+          if(tile.getPiece() instanceof Pawn){
+            row.append("P ");
           }
         }else{
           Color color=tile.getColor();
@@ -72,12 +76,6 @@ public class ChessTextView implements TextView {
     view=new ChessTextView(model);
     view.display();
 
-    //lets go the king can move
-    // we need to write proper tests though
-    Piece rook=model.getBoard().get(7).get(7).getPiece();
-    rook.move(new Coordinate(7,4));
-    view=new ChessTextView(model);
-    view.display();
   }
 
 }

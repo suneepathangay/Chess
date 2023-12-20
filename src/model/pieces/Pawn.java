@@ -39,9 +39,20 @@ public class Pawn extends Piece implements IPiece {
     if(!checkSameCoordinate(position,coordinate)){
       throw new IllegalStateException("coordinate is the same");
     }
-
-
-    this.hasMoved=true;
+    List<Coordinate> validMoves=getValidMoves();
+    if(checkContain(validMoves,coordinate)){
+      if(model.getTileAt(coordinate).getPiece()!=null){
+        Piece piece=model.getTileAt(coordinate).getPiece();
+        if(piece.getColor()==color){
+          throw new IllegalStateException("you cant capture your own piece");
+        }
+      }
+      model.placePiece(coordinate,position);
+      this.position=coordinate;
+      this.hasMoved=true;
+    }else{
+      throw new IllegalStateException("move is illegal");
+    }
   }
 
   //get all the valid moves for a pawn
@@ -55,6 +66,16 @@ public class Pawn extends Piece implements IPiece {
     return true;
   }
 
+  public boolean checkContain(List<Coordinate> validMoves,Coordinate coordinate){
+    for(Coordinate move:validMoves){
+      if(move.getX()==coordinate.getX() && move.getY()==coordinate.getY()){
+        return true;
+      }
+    }
+    return false;
+
+  }
+
   private List<Coordinate> getValidMoves(){
     List<Coordinate> directions=getValidDirections();
 
@@ -65,13 +86,13 @@ public class Pawn extends Piece implements IPiece {
       int newCol=d.getY()+position.getY();
       if(newRow>=0 && newRow<8){
         if(newCol>=0 && newCol<8){
-
+          Coordinate validPos=new Coordinate(newRow,newCol);
+          validMoves.add(validPos);
         }
       }
 
     }
-
-
+    return validMoves;
   }
 
   @Override
@@ -104,6 +125,11 @@ public class Pawn extends Piece implements IPiece {
     directions.add(new Coordinate(1,-1));
     directions.add(new Coordinate(-1,1));
     directions.add(new Coordinate(-1,-1));
+    if(!hasMoved){
+      directions.add(new Coordinate(-2,0));
+      directions.add(new Coordinate(2,0));
+    }
+
     return directions;
   }
 }
