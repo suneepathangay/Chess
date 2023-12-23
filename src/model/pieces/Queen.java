@@ -8,60 +8,43 @@ import src.model.Tile;
 import java.util.ArrayList;
 import java.util.List;
 
-//rules for a rook
-
-//can only move left right and down
-
-//when the piece moves there cannot be any other piece in its way
-
-public class Rook extends Piece implements IPiece{
-
-  private PieceStatus status;
-
-  private Coordinate position;
-
-  private boolean hasMoved;
-
-  private ChessModel model;
-
-  private List<List<Tile>> board;
+public class Queen extends Piece implements IPiece{
 
   private Color color;
 
-  public Rook(Color color, Coordinate position,ChessModel model){
+  private Coordinate position;
+
+  private ChessModel model;
+  private List<List<Tile>> board;
+  private PieceStatus status;
+
+  public Queen(Color color, Coordinate position,ChessModel model){
     this.color=color;
     this.position=position;
     this.model=model;
     this.board=model.getBoard();
   }
+
+
   @Override
   public void move(Coordinate coordinate) {
     if(!checkSameCoordinate(position,coordinate)){
-      throw new IllegalStateException("cannot move to the same tile");
+      throw new IllegalStateException("cannot move to the same location");
     }
-    //getting all the valid moves
     List<Coordinate> validMoves=getValidMoves();
-
     if(checkContain(validMoves,coordinate)){
-      if(model.getTileAt(coordinate).getPiece()!=null){
-        Piece piece=model.getTileAt(coordinate).getPiece();
+      Piece piece=this.model.getTileAt(coordinate).getPiece();
+      if(piece!=null){
         if(piece.getColor()==this.color){
-          throw new IllegalStateException("you cannot capture your own piece");
+          throw new IllegalStateException("move is illegal");
         }
       }
-
       model.placePiece(coordinate,position);
       this.position=coordinate;
     }else{
-      throw new IllegalStateException("Move is illegal");
+      throw new IllegalStateException("this move is illegal");
     }
-
   }
-
-
-
-
-
 
   @Override
   public PieceStatus getStatues() {
@@ -75,25 +58,23 @@ public class Rook extends Piece implements IPiece{
 
   @Override
   public void setStatus(PieceStatus status) {
+    this.status=status;
+  }
 
+  @Override
+  public Color getColor() {
+    return this.color;
   }
 
   private List<Coordinate> getValidMoves(){
-
-    List<Coordinate> valdiMoves=new ArrayList<>();
-
-
+    List<Coordinate> validMoves=new ArrayList<>();
     List<Coordinate> directions=getDirections();
 
-    //looping through all the directions
-    for(Coordinate d:directions) {
-      boolean isPiece=true;
-      boolean isValid=true;
+    for(Coordinate d:directions){
+      int row=position.getX();
+      int col=position.getY();
 
-      int row = position.getX();
-      int col = position.getY();
-
-      while(isValid && isPiece){
+      while(true){
         row+=d.getX();
         col+=d.getY();
         if(row<0 || row>=8){
@@ -102,34 +83,34 @@ public class Rook extends Piece implements IPiece{
         if(col<0 || col>=8){
           break;
         }
-        //getting the curent tile
-        if(model.getTileAt(new Coordinate(row,col)).getPiece()!=null){
-          //there is a piece in that tile but we cant hop over it so we cant go further
-          //but we can still capture that piece
-          System.out.println("coordinates"+row+" "+col);
-          valdiMoves.add(new Coordinate(row,col));
+        Coordinate coor=new Coordinate(row,col);
+        if(model.getTileAt(coor).getPiece()!=null){
+          validMoves.add(coor);
           break;
         }else{
-          valdiMoves.add(new Coordinate(row,col));
+          validMoves.add(coor);
         }
-      }
-    }
 
-    return valdiMoves;
+      }
+
+    }
+    return validMoves;
   }
 
   private List<Coordinate> getDirections(){
     List<Coordinate> directions=new ArrayList<>();
+    //adding the rook directions
     directions.add(new Coordinate(1,0));
     directions.add(new Coordinate(-1,0));
     directions.add(new Coordinate(0,1));
     directions.add(new Coordinate(0,-1));
+    //adding the bishop directions
+    directions.add(new Coordinate(1,1));
+    directions.add(new Coordinate(-1,1));
+    directions.add(new Coordinate(1,-1));
+    directions.add(new Coordinate(-1,-1));
+
     return directions;
-  }
 
-  @Override
-  public Color getColor() {
-    return this.color;
   }
-
 }

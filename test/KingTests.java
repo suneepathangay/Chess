@@ -30,9 +30,9 @@ public class KingTests {
     Tile tile=model.getTileAt(new Coordinate(7,4));
     Piece king=tile.getPiece();
     Assert.assertThrows(IllegalStateException.class,()->king.move(new Coordinate(4,5)));
-    king.move(new Coordinate(7,5));
+    Assert.assertThrows(IllegalStateException.class,()->king.move(new Coordinate(7,5)));
     Tile tile2=model.getTileAt(new Coordinate(7,5));
-    Assert.assertNotEquals(null,tile2.getPiece());
+    Assert.assertEquals(null,tile2.getPiece());
 
   }
 

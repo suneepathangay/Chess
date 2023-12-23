@@ -21,9 +21,9 @@ public class RookTest {
     ChessTextView view=new ChessTextView(model);
     Tile tile=model.getTileAt(new Coordinate(7,0));
     Piece piece=tile.getPiece();
-    piece.move(new Coordinate(5,0));//moving the rook up
+    //piece.move(new Coordinate(5,0));//moving the rook up//doesnt work anymore because pawns are there
     Assert.assertThrows(IllegalStateException.class,()->piece.move(new Coordinate(3,4)));
-    piece.move(new Coordinate(7,0));//moving the rook right
+    Assert.assertThrows(IllegalStateException.class,()->piece.move(new Coordinate(7,0)));
   }
 
   @Test

@@ -1,8 +1,11 @@
 package src.model;
 
+import src.model.pieces.Bishop;
 import src.model.pieces.King;
+import src.model.pieces.Knight;
 import src.model.pieces.Pawn;
 import src.model.pieces.Piece;
+import src.model.pieces.Queen;
 import src.model.pieces.Rook;
 
 import java.util.ArrayList;
@@ -25,6 +28,9 @@ public class ChessModel implements IModel {
     placeKings();
     placeRooks();
     setupPawn();
+    setUpKnight();
+    setupBishop();
+    setupQueen();
     this.turn=Color.WHITE;
   }
 
@@ -148,6 +154,42 @@ public class ChessModel implements IModel {
       Piece pawn=new Pawn(Color.WHITE, tile.getCoordinate(),this);
       tile.setPiece(pawn);
     }
+
+  }
+  private void setUpKnight(){
+    Tile tile1=this.getTileAt(new Coordinate(0,1));
+    tile1.setPiece(new Knight(Color.BLACK,tile1.getCoordinate(),this));
+
+    Tile tile2=this.getTileAt(new Coordinate(0,6));
+    tile2.setPiece(new Knight(Color.BLACK,tile2.getCoordinate(),this));
+
+    Tile tile3=this.getTileAt(new Coordinate(7,1));
+    tile3.setPiece(new Knight(Color.WHITE,tile3.getCoordinate(),this));
+
+    Tile tile4=this.getTileAt(new Coordinate(7,6));
+    tile4.setPiece(new Knight(Color.WHITE,tile4.getCoordinate(),this));
+  }
+
+  private void setupBishop(){
+    Tile tile1=this.getTileAt(new Coordinate(7,2));
+    tile1.setPiece(new Bishop(Color.WHITE,tile1.getCoordinate(),this));
+
+    Tile tile2=this.getTileAt(new Coordinate(7,5));
+    tile2.setPiece(new Bishop(Color.WHITE,tile2.getCoordinate(),this));
+
+    Tile tile3=this.getTileAt(new Coordinate(0,2));
+    tile3.setPiece(new Bishop(Color.BLACK,tile3.getCoordinate(),this));
+
+    Tile tile4=this.getTileAt(new Coordinate(0,5));
+    tile3.setPiece(new Bishop(Color.BLACK,tile4.getCoordinate(),this));
+  }
+
+  private void setupQueen(){
+    Tile tile1=this.getTileAt(new Coordinate(7,3));
+    tile1.setPiece(new Queen(Color.WHITE,tile1.getCoordinate(),this));
+
+    Tile tile2=this.getTileAt(new Coordinate(0,3));
+    tile2.setPiece(new Queen(Color.BLACK,tile2.getCoordinate(),this));
 
   }
 

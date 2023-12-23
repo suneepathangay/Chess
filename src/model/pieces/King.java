@@ -33,7 +33,7 @@ public class King extends Piece implements IPiece{
   }
   @Override
   public void move(Coordinate coordinate) {
-    if(checkCoordinates(position,coordinate)){
+    if(checkSameCoordinate(position,coordinate)){
       throw new IllegalStateException("need to move to different spot");
     }
 
@@ -75,20 +75,7 @@ public class King extends Piece implements IPiece{
     return this.color;
   }
 
-  public boolean checkForCoordinate(List<Coordinate> coordinates,Coordinate coor){
-    for(Coordinate coord:coordinates){
-      int row=coord.getX();
-      int col=coord.getY();
 
-      int coorRow=coor.getX();
-      int coorCol=coor.getY();
-      if(row==coorRow && col==coorCol){
-        return true;
-      }
-
-    }
-    return false;
-  }
 
   private boolean isValidMove(Coordinate coordinate){
     List<Coordinate> validMoves=new ArrayList<>();
@@ -110,7 +97,7 @@ public class King extends Piece implements IPiece{
       validMoves.add(newCoor);
     }
 
-    return checkForCoordinate(validMoves,coordinate);
+    return checkContain(validMoves,coordinate);
   }
 
   private boolean canCastle(){

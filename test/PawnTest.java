@@ -57,7 +57,35 @@ public class PawnTest {
     ChessModel model=new ChessModel();
     Piece pawn=model.getTileAt(new Coordinate(6,0)).getPiece();
     Assert.assertThrows(IllegalStateException.class,()->pawn.move(new Coordinate(6,1)));
-
   }
 
+  @Test
+  public void testPawnIllegalCapture(){
+    ChessModel model=new ChessModel();
+    ChessTextView view=new ChessTextView(model);
+    Piece pawn=model.getTileAt(new Coordinate(6,3)).getPiece();
+    Piece pawn2=model.getTileAt(new Coordinate(1,3)).getPiece();
+    //view.display();
+
+    pawn.move(new Coordinate(4,3));
+    pawn2.move(new Coordinate(3,3));
+    view=new ChessTextView(model);
+    view.display();
+    Assert.assertThrows(IllegalStateException.class,()->pawn.move(new Coordinate(3,3)));
+  }
+
+  @Test
+  public void testPawnLegalCaputre(){
+    ChessModel model=new ChessModel();
+    ChessTextView view=new ChessTextView(model);
+    Piece pawn=model.getTileAt(new Coordinate(6,3)).getPiece();
+    Piece pawn2=model.getTileAt(new Coordinate(1,4)).getPiece();
+
+    pawn.move(new Coordinate(4,3));
+    pawn2.move(new Coordinate(3,4));
+
+    pawn.move(new Coordinate(3,4));
+    view=new ChessTextView(model);
+    view.display();
+  }
 }

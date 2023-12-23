@@ -46,6 +46,10 @@ public class Pawn extends Piece implements IPiece {
         if(piece.getColor()==color){
           throw new IllegalStateException("you cant capture your own piece");
         }
+        //making sure pawns cant caputre pieces infront of them
+        if(Math.abs(coordinate.getX()-position.getX())==1 && Math.abs(coordinate.getY()-position.getY())==0){
+          throw new IllegalStateException("you cannot capture pieces that are directly infront of you");
+        }
       }
       model.placePiece(coordinate,position);
       this.position=coordinate;
@@ -53,27 +57,6 @@ public class Pawn extends Piece implements IPiece {
     }else{
       throw new IllegalStateException("move is illegal");
     }
-  }
-
-  //get all the valid moves for a pawn
-
-  public boolean checkSameCoordinate(Coordinate orgPos, Coordinate newPos) {
-    if (orgPos.getX() == newPos.getX()) {
-      if (orgPos.getY() == newPos.getY()) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  public boolean checkContain(List<Coordinate> validMoves,Coordinate coordinate){
-    for(Coordinate move:validMoves){
-      if(move.getX()==coordinate.getX() && move.getY()==coordinate.getY()){
-        return true;
-      }
-    }
-    return false;
-
   }
 
   private List<Coordinate> getValidMoves(){

@@ -5,9 +5,12 @@ import src.model.Color;
 import src.model.Coordinate;
 import src.model.ReadOnlyChess;
 import src.model.Tile;
+import src.model.pieces.Bishop;
 import src.model.pieces.King;
+import src.model.pieces.Knight;
 import src.model.pieces.Pawn;
 import src.model.pieces.Piece;
+import src.model.pieces.Queen;
 import src.model.pieces.Rook;
 
 import java.util.ArrayList;
@@ -42,6 +45,15 @@ public class ChessTextView implements TextView {
           if(tile.getPiece() instanceof Pawn){
             row.append("P ");
           }
+          if(tile.getPiece() instanceof Knight){
+            row.append("N ");
+          }
+          if(tile.getPiece() instanceof Bishop){
+            row.append("B ");
+          }
+          if(tile.getPiece() instanceof Queen){
+            row.append("Q ");
+          }
         }else{
           Color color=tile.getColor();
           if(color==Color.WHITE){
@@ -70,11 +82,7 @@ public class ChessTextView implements TextView {
     TextView view=new ChessTextView(model);
     view.display();
 
-    //trying to move the king
-    Piece king=model.getBoard().get(7).get(4).getPiece();
-    king.move(new Coordinate(7,5));
-    view=new ChessTextView(model);
-    view.display();
+
 
   }
 
