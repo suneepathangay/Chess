@@ -132,4 +132,12 @@ public class Rook extends Piece implements IPiece{
     return this.color;
   }
 
+  @Override
+  public String getName() {
+    if(color==Color.BLACK){
+      return "BR";
+    }
+    return "WR";
+  }
+
 }

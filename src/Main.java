@@ -10,6 +10,8 @@ public class Main {
 
   public static void main(String[] args){
     ReadOnlyChess model=new ChessModel();
+    ChessTextView view=new ChessTextView(model);
+    view.display();
     Frame frame=new Frame(model);
     frame.display();
 

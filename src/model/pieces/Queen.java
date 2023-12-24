@@ -66,6 +66,14 @@ public class Queen extends Piece implements IPiece{
     return this.color;
   }
 
+  @Override
+  public String getName() {
+    if(color==Color.BLACK){
+      return "BQ";
+    }
+    return "WQ";
+  }
+
   private List<Coordinate> getValidMoves(){
     List<Coordinate> validMoves=new ArrayList<>();
     List<Coordinate> directions=getDirections();

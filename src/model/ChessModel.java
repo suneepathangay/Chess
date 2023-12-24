@@ -181,7 +181,7 @@ public class ChessModel implements IModel {
     tile3.setPiece(new Bishop(Color.BLACK,tile3.getCoordinate(),this));
 
     Tile tile4=this.getTileAt(new Coordinate(0,5));
-    tile3.setPiece(new Bishop(Color.BLACK,tile4.getCoordinate(),this));
+    tile4.setPiece(new Bishop(Color.BLACK,tile4.getCoordinate(),this));
   }
 
   private void setupQueen(){

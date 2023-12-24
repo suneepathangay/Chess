@@ -104,4 +104,12 @@ public class Bishop extends Piece implements IPiece {
   public Color getColor() {
     return this.color;
   }
+
+  @Override
+  public String getName() {
+    if(color==Color.BLACK){
+      return "BB";
+    }
+    return "WB";
+  }
 }

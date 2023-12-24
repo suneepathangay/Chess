@@ -75,6 +75,13 @@ public class King extends Piece implements IPiece{
     return this.color;
   }
 
+  @Override
+  public String getName() {
+    if(color==Color.BLACK){
+      return "BK";
+    }
+    return "WK";
+  }
 
 
   private boolean isValidMove(Coordinate coordinate){

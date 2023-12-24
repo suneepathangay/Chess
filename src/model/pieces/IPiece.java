@@ -38,5 +38,11 @@ public interface IPiece {
    */
   Color getColor();
 
+  /**
+   * Method to get the name of the piece ex(King is K)
+   * @return a String representing the type of piece
+   */
+  String getName();
+
 
 }

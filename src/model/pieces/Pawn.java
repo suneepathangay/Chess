@@ -98,6 +98,14 @@ public class Pawn extends Piece implements IPiece {
     return this.color;
   }
 
+  @Override
+  public String getName() {
+    if(color==Color.BLACK){
+      return "BP";
+    }
+    return "WP";
+  }
+
   private List<Coordinate> getValidDirections(){
     List<Coordinate> directions=new ArrayList<>();
     directions.add(new Coordinate(0,1));

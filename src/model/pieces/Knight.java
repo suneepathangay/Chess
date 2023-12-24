@@ -73,6 +73,14 @@ public class Knight extends Piece implements IPiece {
     return this.color;
   }
 
+  @Override
+  public String getName() {
+    if(color==Color.BLACK){
+      return "BN";
+    }
+    return "WN";
+  }
+
   private List<Coordinate> getValidMoves(){
     List<Coordinate> directions=getValidDirections();
     List<Coordinate> validPos=new ArrayList<>();
