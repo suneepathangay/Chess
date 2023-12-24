@@ -31,6 +31,7 @@ public class ChessModel implements IModel {
     setUpKnight();
     setupBishop();
     setupQueen();
+
     this.turn=Color.WHITE;
   }
 
@@ -139,6 +140,17 @@ public class ChessModel implements IModel {
     Tile tile4=this.board.get(0).get(7);
     Rook blackTwo=new Rook(Color.BLACK,tile4.getCoordinate(),this);
     tile4.setPiece(blackTwo);
+  }
+
+  private void placeRooksTwo(){
+        Tile tile2=this.board.get(7).get(7);
+    Rook whiteTwo=new Rook(Color.WHITE,tile2.getCoordinate(),this);
+    tile2.setPiece(whiteTwo);
+
+        Tile tile4=this.board.get(0).get(7);
+    Rook blackTwo=new Rook(Color.BLACK,tile4.getCoordinate(),this);
+    tile4.setPiece(blackTwo);
+
   }
 
   private void setupPawn(){

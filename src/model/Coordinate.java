@@ -22,4 +22,11 @@ public class Coordinate {
     return this.y;
   }
 
+  public boolean equals(Coordinate other){
+    if(this.getX()==other.getX() && this.getY()== other.getY()){
+      return true;
+    }
+    return false;
+  }
+
 }

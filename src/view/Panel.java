@@ -4,6 +4,7 @@ import src.model.Coordinate;
 import src.model.ReadOnlyChess;
 import src.model.Tile;
 import src.model.pieces.Piece;
+import src.model.pieces.Rook;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,6 +34,7 @@ public class Panel extends JPanel implements IPanel {
     requestFocusInWindow();
     pieces=constructPieces();
     generateMap();
+    System.out.println(nameToPiece.keySet());
 
   }
 
@@ -59,17 +61,20 @@ public class Panel extends JPanel implements IPanel {
         Tile tile=model.getTileAt(new Coordinate(row,col));
         if(tile.getPiece()!=null){
           Piece piece=tile.getPiece();
-          JLabel pieceImg=nameToPiece.get(piece.getName());
 
-          // Calculate the center coordinates of the piece within the square
+
+
+          JLabel pieceImg= nameToPiece.get(piece.getName());
+          JLabel copiedLabel = shallowCopyJLabel(pieceImg);
+
           int pieceX = squareX + (squareSize - pieceImg.getIcon().getIconWidth())-10 ;
           int pieceY = squareY + (squareSize - pieceImg.getIcon().getIconHeight())-5;
 
-          // Set the bounds for the piece
-          pieceImg.setBounds(pieceX, pieceY, pieceImg.getIcon().getIconWidth(), pieceImg.getIcon().getIconHeight());
 
-          // Add the piece to the panel
-          this.add(pieceImg);
+          copiedLabel.setBounds(pieceX, pieceY, pieceImg.getIcon().getIconWidth(), pieceImg.getIcon().getIconHeight());
+
+
+          this.add(copiedLabel);
         }
 
         if (isWhite) {
@@ -89,10 +94,17 @@ public class Panel extends JPanel implements IPanel {
       x = (panelWidth - boardWidth) / 2;
       isWhite = !isWhite;
     }
-
-
-
   }
+
+  private JLabel shallowCopyJLabel(JLabel originalLabel) {
+    JLabel copiedLabel = new JLabel(originalLabel.getIcon());
+    copiedLabel.setBounds(originalLabel.getBounds());
+    copiedLabel.setName(originalLabel.getName());
+    // Copy other properties as needed
+
+    return copiedLabel;
+  }
+
 
   private List<JLabel> constructPieces() {
     List<JLabel> pieces = new ArrayList<>();

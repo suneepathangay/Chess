@@ -28,6 +28,8 @@ public class Rook extends Piece implements IPiece{
 
   private Color color;
 
+  private String name;
+
   public Rook(Color color, Coordinate position,ChessModel model){
     this.color=color;
     this.position=position;
@@ -135,9 +137,13 @@ public class Rook extends Piece implements IPiece{
   @Override
   public String getName() {
     if(color==Color.BLACK){
-      return "BR";
+      this.name="BR";
+      return this.name;
     }
-    return "WR";
+    this.name="WR";
+    return this.name;
   }
+
+
 
 }
