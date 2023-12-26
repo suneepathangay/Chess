@@ -1,5 +1,5 @@
 package src.model;
 
 public enum Color {
-  BLACK,WHITE
+  BLACK,WHITE,BLUE
 }

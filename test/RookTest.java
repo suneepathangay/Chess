@@ -10,6 +10,7 @@ import src.model.Tile;
 import src.model.pieces.Piece;
 import src.model.pieces.Rook;
 import src.view.ChessTextView;
+import src.view.Panel;
 import src.view.TextView;
 
 public class RookTest {
@@ -48,5 +49,17 @@ public class RookTest {
     ChessTextView view=new ChessTextView(model);
     Piece rook=model.getTileAt(new Coordinate(0,0)).getPiece();
    Assert.assertThrows(IllegalStateException.class,()->rook.move(new Coordinate(0,4)));
+  }
+
+
+
+
+
+  //panel test
+  @Test
+  public void testColor(){
+    ChessModel model=new ChessModel();
+    Panel panel=new Panel(model);
+    System.out.println(panel.getColor(Color.BLUE));
   }
 }

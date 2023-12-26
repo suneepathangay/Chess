@@ -1,12 +1,13 @@
 package src.view;
 
+import src.controller.Features;
 import src.model.ReadOnlyChess;
 
 import java.awt.*;
 
 import javax.swing.*;
 
-public class Frame extends JFrame implements IFrame {
+public class Frame extends JFrame implements IView{
 
   private JFrame frame;
 
@@ -28,5 +29,10 @@ public class Frame extends JFrame implements IFrame {
   @Override
   public void display() {
     frame.setVisible(true);
+  }
+
+  @Override
+  public void addFeatures(Features features) {
+    this.panel.addFeatures(features);
   }
 }

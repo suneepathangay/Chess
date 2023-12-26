@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+//TODO WRITE IS GAME OVER METHOD
 public class ChessModel implements IModel {
 
   private boolean isGameStarted;

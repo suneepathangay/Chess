@@ -1,5 +1,7 @@
 package src.view;
 
+import src.controller.Features;
+import src.model.Color;
 import src.model.Coordinate;
 import src.model.ReadOnlyChess;
 import src.model.Tile;
@@ -8,6 +10,9 @@ import src.model.pieces.Rook;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +30,14 @@ public class Panel extends JPanel implements IPanel {
   private List<List<Tile>> currBoard;
   private List<JLabel> pieces;
 
+  private List<String> coorList=new ArrayList<>(2);
+
   private HashMap<String,JLabel> nameToPiece=new HashMap<>();
+
+  private int prevSelectedRow = -1;
+  private int prevSelectedCol = -1;
+
+  private Color prevSelectedColor = null;
 
   public Panel(ReadOnlyChess model) {
     this.model = model;
@@ -35,6 +47,86 @@ public class Panel extends JPanel implements IPanel {
     pieces=constructPieces();
     generateMap();
     System.out.println(nameToPiece.keySet());
+
+  }
+
+  private void handleClick(int x, int y) {
+    int panelWidth = getWidth();
+    int panelHeight = getHeight();
+    int boardSize = currBoard.size();
+    int squareSize = 70;
+
+    int boardWidth = boardSize * squareSize;
+    int boardHeight = boardSize * squareSize;
+
+    int boardX = (panelWidth - boardWidth) / 2;
+    int boardY = (panelHeight - boardHeight) / 2;
+
+    int relativeX = x - boardX;
+    int relativeY = y - boardY;
+
+    int row = relativeY / squareSize;
+    int col = relativeX / squareSize;
+
+
+    if (row >= 0 && row < currBoard.size() && col >= 0 && col < currBoard.size() && model.getTileAt(new Coordinate(row,col)).getPiece()!=null) {
+      Tile tile = model.getTileAt(new Coordinate(row, col));
+
+      if (prevSelectedRow != -1 && prevSelectedCol != -1) {
+        Coordinate prevCoor = new Coordinate(prevSelectedRow, prevSelectedCol);
+        Tile prevTile = model.getTileAt(prevCoor);
+        prevTile.setColor(prevSelectedColor);
+        repaint();
+      }
+
+      prevSelectedColor = tile.getColor();
+      tile.setColor(Color.BLUE);
+
+      prevSelectedRow = row;
+      prevSelectedCol = col;
+
+      repaint();
+    }
+  }
+
+
+
+
+  public void addFeatures(Features features){
+    this.addMouseListener(new MouseAdapter() {
+
+      @Override
+      public void mousePressed(MouseEvent e) {
+        if (e.getClickCount() == 1) {
+          handleClick(e.getX(), e.getY());
+        } else if (e.getClickCount() == 2) {
+          // Double-click detected, deselect the cell
+          if (prevSelectedRow != -1 && prevSelectedCol != -1) {
+            Coordinate prevCoor = new Coordinate(prevSelectedRow, prevSelectedCol);
+            Tile prevTile = model.getTileAt(prevCoor);
+            prevTile.setColor(prevSelectedColor);
+            prevSelectedRow = -1;
+            prevSelectedCol = -1;
+            prevSelectedColor = null;
+            repaint();
+          }
+        }
+      }
+
+      @Override
+      public void mouseReleased(MouseEvent e) {
+        //method to drop the mouse in the selected coordinate
+      }
+
+    });
+
+    addMouseMotionListener(new MouseMotionAdapter() {
+      @Override
+      public void mouseDragged(MouseEvent e) {
+        //method to show the piece moving
+      }
+    });
+
 
   }
 
@@ -63,7 +155,7 @@ public class Panel extends JPanel implements IPanel {
           Piece piece=tile.getPiece();
 
 
-
+          //TODO problem might arise here becasue we might need deep copies instead of shallow copies
           JLabel pieceImg= nameToPiece.get(piece.getName());
           JLabel copiedLabel = shallowCopyJLabel(pieceImg);
 
@@ -77,11 +169,10 @@ public class Panel extends JPanel implements IPanel {
           this.add(copiedLabel);
         }
 
-        if (isWhite) {
-          g.setColor(Color.WHITE);
-        } else {
-          g.setColor(Color.DARK_GRAY);
-        }
+
+        Color color=tile.getColor();
+        g.setColor(getColor(color));
+
         g.fillRect(x, y, squareSize, squareSize);
         x += squareSize;
         isWhite = !isWhite;
@@ -175,12 +266,21 @@ public class Panel extends JPanel implements IPanel {
       if(i==11){
         nameToPiece.put("BP",pieces.get(11));
       }
-
-
-
     }
   }
 
+
+  public java.awt.Color getColor(Color color){
+    switch (color){
+      case BLACK:
+        return java.awt.Color.DARK_GRAY;
+      case WHITE:
+        return java.awt.Color.WHITE;
+      case BLUE:
+        return java.awt.Color.BLUE;
+    }
+    return null;
+  }
 
 
 
