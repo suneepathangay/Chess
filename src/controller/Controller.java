@@ -26,7 +26,7 @@ public class Controller implements Features {
     if(piece==null){
       throw new IllegalStateException("You need to move a piece");
     }
-    model.placePiece(orgCoor,destCoor);
+    model.placePiece(destCoor,orgCoor);
 
   }
 }

@@ -56,6 +56,11 @@ public class ChessModel implements IModel {
 
   }
 
+  @Override
+  public Color getTurn() {
+    return this.turn;
+  }
+
   private void setTurn(){
     if(this.turn==Color.BLACK){
       this.turn=Color.WHITE;

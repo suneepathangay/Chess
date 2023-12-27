@@ -32,4 +32,10 @@ public interface ReadOnlyChess {
    * @return the tile at that position
    */
   Tile getTileAt(Coordinate coordinate);
+
+  /**
+   * Method to get the current turn
+   * @return the current turn
+   */
+  Color getTurn();
 }
