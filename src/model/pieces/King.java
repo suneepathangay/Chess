@@ -7,6 +7,7 @@ import src.model.Tile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class King extends Piece implements IPiece{
 
@@ -20,9 +21,7 @@ public class King extends Piece implements IPiece{
 
   private List<List<Tile>> board;
 
-  private boolean isCheck;
 
-  private boolean isCheckMate;
 
   private Color color;
 
@@ -33,8 +32,6 @@ public class King extends Piece implements IPiece{
     this.position=position;
     this.model=model;
     this.board=model.getBoard();
-    this.isCheck=false;
-    this.isCheckMate=false;
 
   }
   @Override
@@ -130,16 +127,42 @@ public class King extends Piece implements IPiece{
 
     List<Coordinate> validDirections=getValidDirections();
 
-    //TODO If there is a piece make sure that piece is not portected or backed up
+    //TODO make sure that the place where we are mvoing cannot be a valid move for another piece
     //TODO create a mock model for testing purposes
     for(Coordinate coor:validDirections) {
       int newPos = coor.getX() + position.getX();
       int newCol = coor.getY() + position.getY();
-      Coordinate newCoor = new Coordinate(newPos, newCol);
-      validMoves.add(newCoor);
+      Coordinate newCoor=new Coordinate(newPos,newCol);
+      for(int i=0; i<board.size(); i++){
+        for(int j=0; j<board.size(); j++){
+          Tile tile=model.getTileAt(new Coordinate(i,j));
+          if(tile.getPiece()!=null){
+            Piece piece=tile.getPiece();
+            if(piece instanceof King){
+              if(!Objects.equals(piece.getName(), this.getName())){
+                //if a piece can capture where our
+                 if(!piece.isValidMove(newCoor)){
+                    validDirections.add(newCoor);
+                 }
+                //if that coordinate coouldnt be captured by another piece but now can be
+                if(piece.isValidMove(newCoor) && checkContain(validMoves,newCoor)){
+                  validMoves.remove(newCoor);
+                }
+
+              }
+            }else{
+              //if the piece is not null
+              if(!piece.isValidMove(newCoor)){
+                validDirections.add(newCoor);
+              }
+              if(piece.isValidMove(newCoor) && checkContain(validMoves,newCoor)){
+                validMoves.remove(newCoor);
+              }
+            }
+          }
+        }
+      }
     }
-
-
     return validMoves;
   }
 
@@ -190,7 +213,7 @@ public class King extends Piece implements IPiece{
    * @return
    */
   public boolean isInCheckMate(){
-    if(this.isInCheck() && getValidMoves()==null){
+    if(this.isInCheck() && getValidMoves().isEmpty()){
       return true;
     }
     return false;
