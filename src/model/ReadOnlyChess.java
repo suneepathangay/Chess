@@ -38,4 +38,10 @@ public interface ReadOnlyChess {
    * @return the current turn
    */
   Color getTurn();
+
+  /**
+   * Method to get the current player
+   * @return the current player
+   */
+  Coordinate  getPlayer();
 }

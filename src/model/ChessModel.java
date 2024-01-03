@@ -56,10 +56,10 @@ public class ChessModel implements IModel {
   public void placePiece(Coordinate coordinate,Coordinate orgPos){
     Tile tile=this.getTileAt(orgPos);
     Piece piece=tile.getPiece();
-//    if(piece.getColor()!=turn){
-//      System.out.println(turn);
-//      throw new IllegalStateException("not your turn");
-//    }
+    if(piece.getColor()!=turn){
+      System.out.println(turn);
+      throw new IllegalStateException("not your turn");
+    }
     tile.setPiece(null);
     Tile newTile=this.getTileAt(coordinate);
     newTile.setPiece(piece);

@@ -39,7 +39,9 @@ public class Panel extends JPanel implements IPanel {
 
   private Color prevSelectedColor = null;
 
-  private Coordinate currSelectedPiece=null;
+
+
+  private boolean isPiece;
 
   public Panel(ReadOnlyChess model) {
     this.model = model;
@@ -48,14 +50,34 @@ public class Panel extends JPanel implements IPanel {
     requestFocusInWindow();
     pieces=constructPieces();
     generateMap();
+    this.isPiece=false;
+  }
 
 
+  private void hanldeMovePiece(Coordinate coor,Features features){
+    try {
+      features.movePiece(model.getPlayer(), coor);
+      this.isPiece = false;
+    } catch (IllegalStateException e) {
+
+
+      JOptionPane optionPane = new JOptionPane(
+              e.getMessage(),
+              JOptionPane.INFORMATION_MESSAGE,
+              JOptionPane.DEFAULT_OPTION,
+              null,
+              new Object[]{},
+
+              null);
+      JDialog dialog = optionPane.createDialog(this, "Player Turn");
+      dialog.setModal(true);
+      dialog.setLocationRelativeTo(this);
+      dialog.setVisible(true);
+    }
   }
 
   private void handleClick(int x, int y,Features features) {
-    if(currSelectedPiece!=null) {
-      System.out.println(currSelectedPiece.getX() + " " + currSelectedPiece.getY());
-    }
+
     int panelWidth = getWidth();
     int panelHeight = getHeight();
     int boardSize = currBoard.size();
@@ -73,8 +95,8 @@ public class Panel extends JPanel implements IPanel {
     int row = relativeY / squareSize;
     int col = relativeX / squareSize;
 
-    //checks if the board is within  bounds and the tile selected has a piece on it
-    if (row >= 0 && row < currBoard.size() && col >= 0 && col < currBoard.size() && model.getTileAt(new Coordinate(row,col)).getPiece()!=null) {
+    //checks if the board is within  bounds and the tile selected has a piece on it and there is not an already selected piece
+    if (row >= 0 && row < currBoard.size() && col >= 0 && col < currBoard.size() && model.getTileAt(new Coordinate(row, col)).getPiece() != null && !isPiece) {
       Tile tile = model.getTileAt(new Coordinate(row, col));
 
 
@@ -86,66 +108,52 @@ public class Panel extends JPanel implements IPanel {
       }
       prevSelectedColor = tile.getColor();
       tile.setColor(Color.BLUE);
+      //place to set the current player
+      features.setCurrPlayer(tile.getCoordinate());
 
 
-      //to capture a piece
-      //TODO issue with the ccurrent piece not updating correctly when we caputre
-      //TODO works fine for the move to empty square
-      if(currSelectedPiece!=null){
-        Coordinate newCoor=clickToCoor(x,y);
-        try {
-          features.movePiece(currSelectedPiece, newCoor);
-          currSelectedPiece=null;
-        }catch(IllegalStateException e){
-          JOptionPane optionPane = new JOptionPane(
-                  "Illegal move for this piece",
-                  JOptionPane.INFORMATION_MESSAGE,
-                  JOptionPane.DEFAULT_OPTION,
-                  null,
-                  new Object[]{},
-
-                  null);
-          JDialog dialog = optionPane.createDialog(this, "Illegal Move");
-          dialog.setModal(true);
-          dialog.setLocationRelativeTo(this);
-          dialog.setVisible(true);
-        }
-
-      }
       prevSelectedRow = row;
       prevSelectedCol = col;
 
-      currSelectedPiece=tile.getCoordinate();
-
+      this.isPiece=true;
       repaint();
-    }else{
-      //we are clicking on a empty square
-      Coordinate coor=clickToCoor(x,y);
+    }else {
+      //if there is a piece that is selected
+      //TODO Add a check to make sure that if the colors are the same
 
-      if(currSelectedPiece!=null ){
-        //gett the piece original coordinate
-        try {
-          features.movePiece(currSelectedPiece, coor);
-        }catch(IllegalStateException e){
-          JOptionPane optionPane = new JOptionPane(
-                  "bad move",
-                  JOptionPane.INFORMATION_MESSAGE,
-                  JOptionPane.DEFAULT_OPTION,
-                  null,
-                  new Object[]{},
+      if (isPiece) {
 
-                  null);
-          JDialog dialog = optionPane.createDialog(this, "Player Turn");
-          dialog.setModal(true);
-          dialog.setLocationRelativeTo(this);
-          dialog.setVisible(true);
+        Coordinate coor = clickToCoor(x, y);
+        Piece piece = model.getTileAt(coor).getPiece();
+        if (piece != null) {
+          if (piece.getColor() == model.getTurn()) {
+            Tile tile = model.getTileAt(new Coordinate(row, col));
+
+
+            if (prevSelectedRow != -1 && prevSelectedCol != -1) {
+              Coordinate prevCoor = new Coordinate(prevSelectedRow, prevSelectedCol);
+              Tile prevTile = model.getTileAt(prevCoor);
+              prevTile.setColor(prevSelectedColor);
+              repaint();
+            }
+            prevSelectedColor = tile.getColor();
+            tile.setColor(Color.BLUE);
+            features.setCurrPlayer(tile.getCoordinate());
+
+            prevSelectedRow = row;
+            prevSelectedCol = col;
+
+            this.isPiece = true;
+            repaint();
+          }else{
+            hanldeMovePiece(coor,features);
+          }
+          } else {
+            hanldeMovePiece(coor,features);
+
+          }
         }
-
-        //resetting the piece to null
-        currSelectedPiece=null;
-        repaint();
       }
-    }
   }
 
   private Coordinate clickToCoor(int x, int y){
@@ -256,7 +264,7 @@ public class Panel extends JPanel implements IPanel {
       isWhite = !isWhite;
     }
 
-    // Repaint the panel to reflect the changes
+
     repaint();
   }
 
@@ -265,7 +273,7 @@ public class Panel extends JPanel implements IPanel {
     JLabel copiedLabel = new JLabel(originalLabel.getIcon());
     copiedLabel.setBounds(originalLabel.getBounds());
     copiedLabel.setName(originalLabel.getName());
-    // Copy other properties as needed
+
 
     return copiedLabel;
   }

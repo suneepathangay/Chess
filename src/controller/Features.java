@@ -12,4 +12,9 @@ public interface Features {
 
   void movePiece(Coordinate orgCoor, Coordinate destCoor);
 
+  /**
+   * Method to set the current player
+   * @param player the new clicked player
+   */
+  void setCurrPlayer(Coordinate player);
 }
