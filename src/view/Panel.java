@@ -48,11 +48,14 @@ public class Panel extends JPanel implements IPanel {
     requestFocusInWindow();
     pieces=constructPieces();
     generateMap();
-    System.out.println(nameToPiece.keySet());
+
 
   }
 
   private void handleClick(int x, int y,Features features) {
+    if(currSelectedPiece!=null) {
+      System.out.println(currSelectedPiece.getX() + " " + currSelectedPiece.getY());
+    }
     int panelWidth = getWidth();
     int panelHeight = getHeight();
     int boardSize = currBoard.size();
@@ -70,9 +73,10 @@ public class Panel extends JPanel implements IPanel {
     int row = relativeY / squareSize;
     int col = relativeX / squareSize;
 
-    //checks if the board is within  bounds
+    //checks if the board is within  bounds and the tile selected has a piece on it
     if (row >= 0 && row < currBoard.size() && col >= 0 && col < currBoard.size() && model.getTileAt(new Coordinate(row,col)).getPiece()!=null) {
       Tile tile = model.getTileAt(new Coordinate(row, col));
+
 
       if (prevSelectedRow != -1 && prevSelectedCol != -1) {
         Coordinate prevCoor = new Coordinate(prevSelectedRow, prevSelectedCol);
@@ -80,28 +84,63 @@ public class Panel extends JPanel implements IPanel {
         prevTile.setColor(prevSelectedColor);
         repaint();
       }
-
-        prevSelectedColor = tile.getColor();
-        tile.setColor(Color.BLUE);
-
+      prevSelectedColor = tile.getColor();
+      tile.setColor(Color.BLUE);
 
 
+      //to capture a piece
+      //TODO issue with the ccurrent piece not updating correctly when we caputre
+      //TODO works fine for the move to empty square
+      if(currSelectedPiece!=null){
+        Coordinate newCoor=clickToCoor(x,y);
+        try {
+          features.movePiece(currSelectedPiece, newCoor);
+          currSelectedPiece=null;
+        }catch(IllegalStateException e){
+          JOptionPane optionPane = new JOptionPane(
+                  "Illegal move for this piece",
+                  JOptionPane.INFORMATION_MESSAGE,
+                  JOptionPane.DEFAULT_OPTION,
+                  null,
+                  new Object[]{},
+
+                  null);
+          JDialog dialog = optionPane.createDialog(this, "Illegal Move");
+          dialog.setModal(true);
+          dialog.setLocationRelativeTo(this);
+          dialog.setVisible(true);
+        }
+
+      }
       prevSelectedRow = row;
       prevSelectedCol = col;
 
       currSelectedPiece=tile.getCoordinate();
+
       repaint();
     }else{
-      //we are clicking on a empty square or we are trying to capture an opposite piece
+      //we are clicking on a empty square
       Coordinate coor=clickToCoor(x,y);
-      System.out.println("executing");
+
       if(currSelectedPiece!=null ){
-
-
-        System.out.println(coor.getX()+" "+coor.getY());
         //gett the piece original coordinate
+        try {
+          features.movePiece(currSelectedPiece, coor);
+        }catch(IllegalStateException e){
+          JOptionPane optionPane = new JOptionPane(
+                  "bad move",
+                  JOptionPane.INFORMATION_MESSAGE,
+                  JOptionPane.DEFAULT_OPTION,
+                  null,
+                  new Object[]{},
 
-        features.movePiece(currSelectedPiece,coor);
+                  null);
+          JDialog dialog = optionPane.createDialog(this, "Player Turn");
+          dialog.setModal(true);
+          dialog.setLocationRelativeTo(this);
+          dialog.setVisible(true);
+        }
+
         //resetting the piece to null
         currSelectedPiece=null;
         repaint();

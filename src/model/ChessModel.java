@@ -15,11 +15,16 @@ import java.util.Map;
 
 
 //TODO WRITE IS GAME OVER METHOD
+
+//TODO Creata a current player variable that is represented by a coordinate
 public class ChessModel implements IModel {
 
   private boolean isGameStarted;
 
   private Color turn;
+
+  //current player is represented by a coordiante
+  private Coordinate currentPlayer;
 
   Map<Color,Integer> scoreMap=new HashMap<>();
 
@@ -34,16 +39,27 @@ public class ChessModel implements IModel {
     setupBishop();
     setupQueen();
 
+
     this.turn=Color.WHITE;
+    this.currentPlayer=null;
+  }
+
+  public void setCurrentPlayer(Coordinate coor){
+    this.currentPlayer=coor;
+  }
+
+  public Coordinate getPlayer(){
+    return this.currentPlayer;
   }
 
   @Override
   public void placePiece(Coordinate coordinate,Coordinate orgPos){
     Tile tile=this.getTileAt(orgPos);
     Piece piece=tile.getPiece();
-    if(piece.getColor()!=turn){
-      throw new IllegalStateException("not your turn");
-    }
+//    if(piece.getColor()!=turn){
+//      System.out.println(turn);
+//      throw new IllegalStateException("not your turn");
+//    }
     tile.setPiece(null);
     Tile newTile=this.getTileAt(coordinate);
     newTile.setPiece(piece);

@@ -22,11 +22,14 @@ public class Controller implements Features {
   @Override
   public void movePiece(Coordinate orgCoor, Coordinate destCoor) {
     Piece piece=model.getTileAt(orgCoor).getPiece();
+
+
     //there is no piece at the orgCoor
     if(piece==null){
       throw new IllegalStateException("You need to move a piece");
     }
-    model.placePiece(destCoor,orgCoor);
 
+    //dont call the model move method call the piece mthod
+    piece.move(destCoor);
   }
 }

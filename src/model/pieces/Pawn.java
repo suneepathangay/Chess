@@ -108,14 +108,12 @@ public class Pawn extends Piece implements IPiece {
 
   private List<Coordinate> getValidDirections(){
     List<Coordinate> directions=new ArrayList<>();
-    directions.add(new Coordinate(0,1));
-    directions.add(new Coordinate(0,-1));
     directions.add(new Coordinate(1,0));
     directions.add(new Coordinate(-1,0));
-    directions.add(new Coordinate(1,1));
-    directions.add(new Coordinate(1,-1));
     directions.add(new Coordinate(-1,1));
     directions.add(new Coordinate(-1,-1));
+    directions.add(new Coordinate(1,1));
+    directions.add(new Coordinate(1,-1));
     if(!hasMoved){
       directions.add(new Coordinate(-2,0));
       directions.add(new Coordinate(2,0));
