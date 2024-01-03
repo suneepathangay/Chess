@@ -81,6 +81,15 @@ public class Knight extends Piece implements IPiece {
     return "WN";
   }
 
+  @Override
+  public boolean isValidMove(Coordinate dest) {
+    List<Coordinate> validMoves=getValidMoves();
+    if(checkContain(validMoves,dest)){
+      return true;
+    }
+    return false;
+  }
+
   private List<Coordinate> getValidMoves(){
     List<Coordinate> directions=getValidDirections();
     List<Coordinate> validPos=new ArrayList<>();

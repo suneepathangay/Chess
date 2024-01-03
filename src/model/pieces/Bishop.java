@@ -112,4 +112,13 @@ public class Bishop extends Piece implements IPiece {
     }
     return "WB";
   }
+
+  @Override
+  public boolean isValidMove(Coordinate dest) {
+    List<Coordinate> validMoves=getValidMoves();
+    if(checkContain(validMoves,dest)){
+      return true;
+    }
+    return false;
+  }
 }

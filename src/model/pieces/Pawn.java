@@ -106,6 +106,15 @@ public class Pawn extends Piece implements IPiece {
     return "WP";
   }
 
+  @Override
+  public boolean isValidMove(Coordinate dest) {
+    List<Coordinate> validMoves=getValidMoves();
+    if(checkContain(validMoves,dest)){
+      return true;
+    }
+    return false;
+  }
+
   private List<Coordinate> getValidDirections(){
     List<Coordinate> directions=new ArrayList<>();
     directions.add(new Coordinate(1,0));

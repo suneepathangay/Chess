@@ -44,5 +44,12 @@ public interface IPiece {
    */
   String getName();
 
+  /**
+   * Method to determine if the move is valid.
+   * @param dest the destination coordinate
+   * @return a boolean determining if the proposed move is valid
+   */
+  boolean isValidMove(Coordinate dest);
+
 
 }

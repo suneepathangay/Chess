@@ -22,7 +22,6 @@ public abstract class Piece implements IPiece {
       }
     }
     return false;
-
   }
 
 }

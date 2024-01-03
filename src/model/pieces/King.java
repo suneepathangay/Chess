@@ -20,6 +20,10 @@ public class King extends Piece implements IPiece{
 
   private List<List<Tile>> board;
 
+  private boolean isCheck;
+
+  private boolean isCheckMate;
+
   private Color color;
 
   public King(Color color, Coordinate position,ChessModel model){
@@ -29,6 +33,8 @@ public class King extends Piece implements IPiece{
     this.position=position;
     this.model=model;
     this.board=model.getBoard();
+    this.isCheck=false;
+    this.isCheckMate=false;
 
   }
   @Override
@@ -83,8 +89,8 @@ public class King extends Piece implements IPiece{
     return "WK";
   }
 
-
-  private boolean isValidMove(Coordinate coordinate){
+  @Override
+  public boolean isValidMove(Coordinate coordinate){
     List<Coordinate> validMoves=new ArrayList<>();
 
 
@@ -118,6 +124,26 @@ public class King extends Piece implements IPiece{
     return false;
   }
 
+
+  private List<Coordinate> getValidMoves(){
+    List<Coordinate> validMoves=new ArrayList<>();
+
+    List<Coordinate> validDirections=getValidDirections();
+
+    //TODO If there is a piece make sure that piece is not portected or backed up
+    //TODO create a mock model for testing purposes
+    for(Coordinate coor:validDirections) {
+      int newPos = coor.getX() + position.getX();
+      int newCol = coor.getY() + position.getY();
+      Coordinate newCoor = new Coordinate(newPos, newCol);
+      validMoves.add(newCoor);
+    }
+
+
+    return validMoves;
+  }
+
+
   //initialize a list of valid directions for a king
   public List<Coordinate> getValidDirections(){
     List<Coordinate> validDirections=new ArrayList<>();
@@ -134,6 +160,40 @@ public class King extends Piece implements IPiece{
       validDirections.add(new Coordinate(2,0));
     }
     return validDirections;
+  }
+
+  /**
+   * Method to determine if the king is in check.
+   * @return a boolean variable determining if the king is in check
+   */
+  public boolean isInCheck(){
+    //iterate over the board and for each piece check if a the position of the king is a valid move
+    for(int row=0; row<board.size(); row++){
+      for(int col=0; col<board.size(); col++){
+        Coordinate coor=new Coordinate(row,col);
+        Tile tile=model.getTileAt(coor);
+        if(tile.getPiece()!=null){
+          Piece piece=tile.getPiece();
+          if(piece.isValidMove(this.position)){
+            return true;
+          }
+
+        }
+
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Method to determine if the game is over through checkmate
+   * @return
+   */
+  public boolean isInCheckMate(){
+    if(this.isInCheck() && getValidMoves()==null){
+      return true;
+    }
+    return false;
   }
 
 

@@ -150,7 +150,6 @@ public class Panel extends JPanel implements IPanel {
           }
           } else {
             hanldeMovePiece(coor,features);
-
           }
         }
       }

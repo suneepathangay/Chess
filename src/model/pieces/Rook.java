@@ -144,6 +144,14 @@ public class Rook extends Piece implements IPiece{
     return this.name;
   }
 
+  @Override
+  public boolean isValidMove(Coordinate dest) {
+    List<Coordinate> validMoves=getValidMoves();
+    if(checkContain(validMoves,dest)){
+      return true;
+    }
+    return false;
+  }
 
 
 }
