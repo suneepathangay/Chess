@@ -3,6 +3,7 @@ package src.model.pieces;
 import src.model.ChessModel;
 import src.model.Color;
 import src.model.Coordinate;
+import src.model.IModel;
 import src.model.Tile;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class King extends Piece implements IPiece{
 
   private boolean hasMoved;
 
-  private ChessModel model;
+  private IModel model;
 
   private List<List<Tile>> board;
 
@@ -25,7 +26,7 @@ public class King extends Piece implements IPiece{
 
   private Color color;
 
-  public King(Color color, Coordinate position,ChessModel model){
+  public King(Color color, Coordinate position, IModel model){
     this.status=PieceStatus.PLAYING;
     this.hasMoved=false;
     this.color=color;
@@ -141,7 +142,7 @@ public class King extends Piece implements IPiece{
             if(piece instanceof King){
               if(!Objects.equals(piece.getName(), this.getName())){
                 //if a piece can capture where our
-                 if(!piece.isValidMove(newCoor)){
+                 if(!piece.isValidMove(newCoor) && piece.getColor()!=this.color){
                     validDirections.add(newCoor);
                  }
                 //if that coordinate coouldnt be captured by another piece but now can be
