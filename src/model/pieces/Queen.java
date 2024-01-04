@@ -3,6 +3,7 @@ package src.model.pieces;
 import src.model.ChessModel;
 import src.model.Color;
 import src.model.Coordinate;
+import src.model.IModel;
 import src.model.Tile;
 
 import java.util.ArrayList;
@@ -14,11 +15,11 @@ public class Queen extends Piece implements IPiece{
 
   private Coordinate position;
 
-  private ChessModel model;
+  private IModel model;
   private List<List<Tile>> board;
   private PieceStatus status;
 
-  public Queen(Color color, Coordinate position,ChessModel model){
+  public Queen(Color color, Coordinate position,IModel model){
     this.color=color;
     this.position=position;
     this.model=model;

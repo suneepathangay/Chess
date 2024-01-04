@@ -19,4 +19,10 @@ public interface IModel extends ReadOnlyChess {
    */
   void placePiece(Coordinate coordinate,Coordinate orgPos);
 
+  /**
+   * Determines if the game is over.
+   * @return a boolean if the game is over
+   */
+  boolean isGameOver();
+
 }

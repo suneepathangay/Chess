@@ -8,6 +8,7 @@ import src.model.Tile;
 import src.model.pieces.King;
 import src.model.pieces.Knight;
 import src.model.pieces.Piece;
+import src.model.pieces.Queen;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +22,9 @@ public class MockModel implements IModel {
 
   public MockModel(){
     initBoard();
-    setupKings();
+    //setupTestOne();
+    setupTestTwo();
+
     this.turn=Color.BLACK;
   }
 
@@ -74,6 +77,11 @@ public class MockModel implements IModel {
   }
 
   @Override
+  public boolean isGameOver() {
+    return false;
+  }
+
+  @Override
   public List<List<Tile>> getBoard() {
     return this.board;
   }
@@ -103,14 +111,30 @@ public class MockModel implements IModel {
     return null;
   }
 
-  private void setupKings(){
+  private void setupTestOne(){
     Tile tile=this.getTileAt(new Coordinate(3,4));
     tile.setPiece(new King(Color.WHITE,new Coordinate(3,4),this));
 
     //placing a
     Tile tile2=this.getTileAt(new Coordinate(5,5));
     tile2.setPiece(new Knight(Color.BLACK,new Coordinate(5,5),this));
+  }
 
+  private void setupTestTwo(){
+    Tile tile=this.getTileAt(new Coordinate(3,4));
+    tile.setPiece(new King(Color.WHITE,new Coordinate(3,4),this));
+
+    Tile tile2=this.getTileAt(new Coordinate(1,6));
+    tile2.setPiece(new Queen(Color.BLACK,new Coordinate(1,6),this));
+
+    Tile tile4=this.getTileAt(new Coordinate(1,2));
+    tile4.setPiece(new Queen(Color.BLACK,new Coordinate(1,2),this));
+
+    Tile tile3=this.getTileAt(new Coordinate(5,6));
+    tile3.setPiece(new Queen(Color.BLACK,new Coordinate(5,6),this));
+
+    Tile tile5=this.getTileAt(new Coordinate(5,2));
+    tile5.setPiece(new Queen(Color.BLACK,new Coordinate(5,2),this));
   }
 
   private void setTurn(){

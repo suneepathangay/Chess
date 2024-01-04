@@ -15,6 +15,7 @@ public class Main {
      IView view=new Frame(model);
     Controller controller=new Controller(model,view);
 
+
   }
 
 

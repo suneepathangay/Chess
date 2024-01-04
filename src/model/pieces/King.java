@@ -214,10 +214,7 @@ public class King extends Piece implements IPiece{
    * @return
    */
   public boolean isInCheckMate(){
-    if(this.isInCheck() && getValidMoves().isEmpty()){
-      return true;
-    }
-    return false;
+    return this.isInCheck();
   }
 
 

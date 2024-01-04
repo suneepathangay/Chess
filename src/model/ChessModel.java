@@ -228,4 +228,23 @@ public class ChessModel implements IModel {
 
   }
 
+  @Override
+  public boolean isGameOver(){
+    //get the kings and check their checkmate status
+    for(int row=0; row<board.size(); row++){
+      for(int col=0; col<board.size(); col++){
+        Tile tile=this.getTileAt(new Coordinate(row,col));
+        if(tile.getPiece()!=null){
+          Piece piece=tile.getPiece();
+          if(piece instanceof King){
+            if(((King) piece).isInCheckMate()){
+              return true;
+            }
+          }
+        }
+      }
+    }
+    return false;
+  }
+
 }
