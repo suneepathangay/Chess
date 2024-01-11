@@ -1,59 +1,54 @@
 package src.model.pieces;
 
-import src.model.ChessModel;
 import src.model.Color;
 import src.model.Coordinate;
 import src.model.IModel;
 import src.model.Tile;
+import src.model.pieces.IPiece;
+import src.model.pieces.Piece;
+import src.model.pieces.PieceStatus;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class King extends Piece implements IPiece{
 
-  private PieceStatus status;
-
+  private Color color;
   private Coordinate position;
-
-  private boolean hasMoved;
 
   private IModel model;
 
+  private boolean hasMoved;
+
+  private PieceStatus status;
+
   private List<List<Tile>> board;
 
-
-
-  private Color color;
-
-  public King(Color color, Coordinate position, IModel model){
-    this.status=PieceStatus.PLAYING;
+  public King(Color color,Coordinate position,IModel model){
     this.hasMoved=false;
     this.color=color;
     this.position=position;
     this.model=model;
     this.board=model.getBoard();
-
   }
+
   @Override
   public void move(Coordinate coordinate) {
-    if(checkSameCoordinate(position,coordinate)){
-      throw new IllegalStateException("need to move to different spot");
+    if(coordinate.equals(position)){
+      throw new IllegalStateException("");
     }
-
-    this.hasMoved=true;
-    if(isValidMove(coordinate)) {
+    List<Coordinate> validMoves=getValidMoves();
+    if(checkContain(validMoves,coordinate)){
       if(model.getTileAt(coordinate).getPiece()!=null){
         Piece piece=model.getTileAt(coordinate).getPiece();
         if(piece.getColor()==this.color){
-          throw new IllegalStateException("you cannot capture your own piece");
+          throw new IllegalStateException("cannot capture your own piece");
         }
       }
-
-      model.placePiece(coordinate, position);
+      model.placePiece(coordinate,position);
       this.position=coordinate;
     }else{
-      throw new IllegalStateException("illegal move");
+      throw new IllegalStateException("This move is illegal");
     }
 
   }
@@ -71,7 +66,6 @@ public class King extends Piece implements IPiece{
   @Override
   public void setStatus(PieceStatus status) {
     this.status=status;
-
   }
 
   @Override
@@ -81,141 +75,67 @@ public class King extends Piece implements IPiece{
 
   @Override
   public String getName() {
-    if(color==Color.BLACK){
-      return "BK";
+    if(this.color==Color.WHITE){
+      return "WK";
     }
-    return "WK";
+    return "BK";
   }
 
   @Override
-  public boolean isValidMove(Coordinate coordinate){
-    List<Coordinate> validMoves=new ArrayList<>();
-
-
-    if(coordinate.getX()<0 || coordinate.getY()<0){
-      throw new IllegalStateException("out of bounds");
-    }
-    if(coordinate.getX()>=8 || coordinate.getY()>=8){
-      throw new IllegalStateException("out of bounds");
-    }
-
-    List<Coordinate> validDirections=getValidDirections();
-
-    for(Coordinate coor:validDirections) {
-      int newPos = coor.getX() + position.getX();
-      int newCol = coor.getY() + position.getY();
-      Coordinate newCoor = new Coordinate(newPos, newCol);
-      validMoves.add(newCoor);
-    }
-
-    return checkContain(validMoves,coordinate);
-  }
-
-  private boolean canCastle(){
-    //if the king is at its original position and there is a rook exactly two spots over
-    if(position.getX()==0 || position.getX()==7){
-      if(!hasMoved && position.getY()==4){
-        //call getBoardAtMethod to check for a rook
-      }
-    }
-
+  public boolean isValidMove(Coordinate dest) {
     return false;
   }
 
-
   private List<Coordinate> getValidMoves(){
+    List<Coordinate> directions=getValidDirections();
     List<Coordinate> validMoves=new ArrayList<>();
 
-    List<Coordinate> validDirections=getValidDirections();
+    for(Coordinate d:directions){
+      int newX=position.getX()+d.getX();
+      int newY=position.getY()+d.getY();
+      //checking if there is a piece there
+      if(newX>=0 && newX<8){
+        if(newY>=0 && newY<8){
+          //validMoves.add(new Coordinate(newX,newY));
+          Coordinate newPosition=new Coordinate(newX,newY);
+          //check if going to the new postion puts our king in harms way
 
-    //TODO make sure that the place where we are mvoing cannot be a valid move for another piece
-    //TODO create a mock model for testing purposes
-    for(Coordinate coor:validDirections) {
-      int newPos = coor.getX() + position.getX();
-      int newCol = coor.getY() + position.getY();
-      Coordinate newCoor=new Coordinate(newPos,newCol);
-      for(int i=0; i<board.size(); i++){
-        for(int j=0; j<board.size(); j++){
-          Tile tile=model.getTileAt(new Coordinate(i,j));
-          if(tile.getPiece()!=null){
-            Piece piece=tile.getPiece();
-            if(piece instanceof King){
-              if(!Objects.equals(piece.getName(), this.getName())){
-                //if a piece can capture where our
-                 if(!piece.isValidMove(newCoor) && piece.getColor()!=this.color){
-                    validDirections.add(newCoor);
-                 }
-                //if that coordinate coouldnt be captured by another piece but now can be
-                if(piece.isValidMove(newCoor) && checkContain(validMoves,newCoor)){
-                  validMoves.remove(newCoor);
-                }
-
-              }
-            }else{
-              //if the piece is not null
-              if(!piece.isValidMove(newCoor)){
-                validDirections.add(newCoor);
-              }
-              if(piece.isValidMove(newCoor) && checkContain(validMoves,newCoor)){
-                validMoves.remove(newCoor);
-              }
-            }
-          }
         }
       }
+
     }
+
+
     return validMoves;
   }
 
-
-  //initialize a list of valid directions for a king
-  public List<Coordinate> getValidDirections(){
-    List<Coordinate> validDirections=new ArrayList<>();
-    validDirections.add(new Coordinate(1,0));
-    validDirections.add(new Coordinate(-1,0));
-    validDirections.add(new Coordinate(0,1));
-    validDirections.add(new Coordinate(-1,0));
-    validDirections.add(new Coordinate(1,1));
-    validDirections.add(new Coordinate(1,-1));
-    validDirections.add(new Coordinate(-1,-1));
-    validDirections.add(new Coordinate(-1,1));
-    //if the king can castle
-    if(canCastle()){
-      validDirections.add(new Coordinate(2,0));
-    }
-    return validDirections;
-  }
-
-  /**
-   * Method to determine if the king is in check.
-   * @return a boolean variable determining if the king is in check
-   */
-  public boolean isInCheck(){
-    //iterate over the board and for each piece check if a the position of the king is a valid move
-    for(int row=0; row<board.size(); row++){
-      for(int col=0; col<board.size(); col++){
-        Coordinate coor=new Coordinate(row,col);
-        Tile tile=model.getTileAt(coor);
-        if(tile.getPiece()!=null){
-          Piece piece=tile.getPiece();
-          if(piece.isValidMove(this.position)){
-            return true;
-          }
-
-        }
-
-      }
-    }
+  public boolean isInCheckMate(){
+    List<Coordinate> moves=getValidMoves();
     return false;
   }
 
-  /**
-   * Method to determine if the game is over through checkmate
-   * @return
-   */
-  public boolean isInCheckMate(){
-    return this.isInCheck();
+  private List<Coordinate> getValidDirections(){
+    List<Coordinate> directions=new ArrayList<>();
+    directions.add(new Coordinate(1,0)); //going down
+    directions.add(new Coordinate(-1,0)); //going up
+    directions.add(new Coordinate(0,1));//going right
+    directions.add(new Coordinate(0,-1));//going left
+    directions.add(new Coordinate(1,1));//going bottom right
+    directions.add(new Coordinate(-1,1));//going top right
+    directions.add(new Coordinate(1,-1));//going bottom left
+    directions.add(new Coordinate(-1,-1));//going top left
+
+    return directions;
   }
 
+  public boolean isInCheck(){
+    return false;
+  }
 
+  private Color getOppColor(){
+    if(color==Color.BLACK){
+      return Color.WHITE;
+    }
+    return Color.BLACK;
+  }
 }

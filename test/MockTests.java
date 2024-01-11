@@ -38,18 +38,6 @@ public class MockTests {
   }
 
 
-  @Test
-  public void testCheckMate(){
-    MockModel mock=new MockModel();
-    ChessTextView view=new ChessTextView(mock);
-    view.display();
-    Piece piece=mock.getTileAt(new Coordinate(3,4)).getPiece();
-    if(piece instanceof King){
-      ((King) piece).isInCheckMate();
-      System.out.println(((King) piece).isInCheckMate());
-    }
-
-  }
 
   //test to make sure that king cant capture a protected piece
   @Test
@@ -57,6 +45,29 @@ public class MockTests {
 
   }
 
+  @Test
+  public void testKingCheck(){
+    MockModel model=new MockModel();
+    ChessTextView view=new ChessTextView(model);
+    view.display();
+    Piece piece=model.getTileAt(new Coordinate(3,4)).getPiece();
+    if(piece instanceof King){
+      boolean checkStatus= ((King) piece).isInCheck();
+      Assert.assertEquals(true,checkStatus);
+    }
+  }
+
+  @Test
+  public void testCheckMate(){
+    MockModel model=new MockModel();
+    ChessTextView view=new ChessTextView(model);
+    view.display();
+    Piece piece=model.getTileAt(new Coordinate(3,4)).getPiece();
+    if(piece instanceof King){
+      boolean checkMateStatus=((King) piece).isInCheckMate();
+      Assert.assertEquals(true,checkMateStatus);
+    }
+  }
 
 
 }

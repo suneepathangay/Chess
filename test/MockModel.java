@@ -9,6 +9,7 @@ import src.model.pieces.King;
 import src.model.pieces.Knight;
 import src.model.pieces.Piece;
 import src.model.pieces.Queen;
+import src.model.pieces.Rook;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,8 +23,8 @@ public class MockModel implements IModel {
 
   public MockModel(){
     initBoard();
-    //setupTestOne();
-    setupTestTwo();
+
+    setupCheckMate();
 
     this.turn=Color.BLACK;
   }
@@ -111,16 +112,9 @@ public class MockModel implements IModel {
     return null;
   }
 
-  private void setupTestOne(){
-    Tile tile=this.getTileAt(new Coordinate(3,4));
-    tile.setPiece(new King(Color.WHITE,new Coordinate(3,4),this));
 
-    //placing a
-    Tile tile2=this.getTileAt(new Coordinate(5,5));
-    tile2.setPiece(new Knight(Color.BLACK,new Coordinate(5,5),this));
-  }
 
-  private void setupTestTwo(){
+  private void testCheck(){
     Tile tile=this.getTileAt(new Coordinate(3,4));
     tile.setPiece(new King(Color.WHITE,new Coordinate(3,4),this));
 
@@ -135,6 +129,31 @@ public class MockModel implements IModel {
 
     Tile tile5=this.getTileAt(new Coordinate(5,2));
     tile5.setPiece(new Queen(Color.BLACK,new Coordinate(5,2),this));
+  }
+
+  private void setupCheckMate(){
+    Tile tile=this.getTileAt(new Coordinate(3,4));
+    tile.setPiece(new King(Color.WHITE,new Coordinate(3,4),this));
+
+    Tile tile2=this.getTileAt(new Coordinate(1,6));
+    tile2.setPiece(new Queen(Color.BLACK,new Coordinate(1,6),this));
+
+    Tile tile4=this.getTileAt(new Coordinate(1,2));
+    tile4.setPiece(new Queen(Color.BLACK,new Coordinate(1,2),this));
+
+    Tile tile3=this.getTileAt(new Coordinate(5,6));
+    tile3.setPiece(new Queen(Color.BLACK,new Coordinate(5,6),this));
+
+    Tile tile5=this.getTileAt(new Coordinate(5,2));
+    tile5.setPiece(new Queen(Color.BLACK,new Coordinate(5,2),this));
+
+    //adding the rooks
+    Tile tileRookOne=this.getTileAt(new Coordinate(3,2));
+    tileRookOne.setPiece(new Rook(Color.BLACK,new Coordinate(3,2),this));
+
+    Tile tileRookTwo=this.getTileAt(new Coordinate(3,6));
+    tileRookTwo.setPiece(new Rook(Color.BLACK,new Coordinate(3,6),this));
+
   }
 
   private void setTurn(){

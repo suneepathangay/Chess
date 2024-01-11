@@ -11,7 +11,7 @@ import java.util.List;
 public class Pawn extends Piece implements IPiece {
   //specific rules for pawns
 
-  //on the first move the pawn can move two squares in the vertical direction
+  //TODO add the promotion part of the game
 
 
   private PieceStatus status;

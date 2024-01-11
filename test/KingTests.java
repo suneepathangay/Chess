@@ -12,6 +12,10 @@ import src.model.pieces.Piece;
 
 public class KingTests {
 
+  //things to test for in King
+  //test the movement
+  //test the checking and checkmating
+
   @Test
   public void testKingCreated(){
     ChessModel model=new ChessModel();
@@ -40,4 +44,6 @@ public class KingTests {
   public void testCastling(){
 
   }
+
+
 }

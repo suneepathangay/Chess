@@ -53,7 +53,8 @@ public class KnightTest {
     Piece pawn=model.getTileAt(new Coordinate(1,0)).getPiece();
     pawn.move(new Coordinate(2,0));
     knight.move(new Coordinate(4,0));
-
   }
+
+
 
 }

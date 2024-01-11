@@ -3,6 +3,7 @@ package src.model.pieces;
 import src.model.ChessModel;
 import src.model.Color;
 import src.model.Coordinate;
+import src.model.IModel;
 import src.model.Tile;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class Rook extends Piece implements IPiece{
 
   private boolean hasMoved;
 
-  private ChessModel model;
+  private IModel model;
 
   private List<List<Tile>> board;
 
@@ -30,7 +31,7 @@ public class Rook extends Piece implements IPiece{
 
   private String name;
 
-  public Rook(Color color, Coordinate position,ChessModel model){
+  public Rook(Color color, Coordinate position,IModel model){
     this.color=color;
     this.position=position;
     this.model=model;
