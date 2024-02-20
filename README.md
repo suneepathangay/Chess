@@ -24,3 +24,7 @@ This is a simple chess game implemented in Java using the Model-View-Controller 
    git clone https://github.com/your-username/chess-game.git
    cd chess-game
 2. Locate the Main class, Click run and start Playing!😊
+
+TODO
+
+Build an AI maybe
